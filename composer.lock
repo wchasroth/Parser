@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wchasroth/Alfred.git",
-                "reference": "0e32b96542fd723bf010ea4c608ba7d9df0bd73f"
+                "reference": "28fa420bfb0519ebca1ee06839390b3a69fbfa1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wchasroth/Alfred/zipball/0e32b96542fd723bf010ea4c608ba7d9df0bd73f",
-                "reference": "0e32b96542fd723bf010ea4c608ba7d9df0bd73f",
+                "url": "https://api.github.com/repos/wchasroth/Alfred/zipball/28fa420bfb0519ebca1ee06839390b3a69fbfa1e",
+                "reference": "28fa420bfb0519ebca1ee06839390b3a69fbfa1e",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
                 "issues": "https://github.com/wchasroth/Alfred/issues",
                 "source": "https://github.com/wchasroth/Alfred/tree/main"
             },
-            "time": "2024-12-19T15:11:37+00:00"
+            "time": "2024-12-26T18:40:52+00:00"
         },
         {
             "name": "smarty/smarty",
