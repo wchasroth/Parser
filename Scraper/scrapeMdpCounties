@@ -1,0 +1,3 @@
+#!/bin/bash
+
+node scraper.js https://michigandems.com/county-chairs/
