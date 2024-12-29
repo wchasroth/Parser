@@ -1,0 +1,14 @@
+{
+  "name": "counties",
+  "version": "1.0.0",
+  "description": "scrape MDP county page for all county info",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^23.11.1"
+  }
+}
