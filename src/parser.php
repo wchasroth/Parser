@@ -11,34 +11,40 @@
 
    require_once('../vendor/autoload.php');
 
-   $county   = "";
+   $categoryMatches = [" County<", " Club<", " Caucus<",
+       " District 1<", " District 2<", " District 3<",  " District 4<",  " District 5<",  " District 6<", " District 7<",
+       " District 8<", " District 9<", " District 10<", " District 11<", " District 12<", " District 13<"];
+   $excludeMatches = [ "www.w3.org/2000/svg", "michigandems.com", "secure.actblue.com", "secure.ngpvan.com" ];
+   $category   = "";
    $lastLink = "";
    $web1Found = false;
    while ( ($line = fgets(STDIN)) !== false) {
+       // Club<    District N<   Caucus<    County<
       if (Str::contains($line, '<h2 class="elementor-heading-title elementor-size-default')) {
-         if (Str::contains($line, " County<")) {
+         if (Str::hasAnyOf($line, $categoryMatches)) {
             $line = Str::replaceAll($line, "<BR>", "");
             $line = Str::replaceAll($line, "<br>", "");
-            $name = Str::substringBefore   ($line, " County<");
+            $name = getSubstringBeforeMatch($line, $categoryMatches);
             $name = Str::substringAfterLast($name, ">");
-            $county = trim($name);
-            $county = Str::replaceAll($county, ".", "");
+            $category = trim($name);
+            $category = Str::replaceAll($category, ".", "");
             $web1Found = false;
          }
       }
 
-      if (! empty($county)) {
+      if (! empty($category)  &&  ! Str::hasAnyOf($line, $excludeMatches)) {
           $link = extractHyperlink($line);
           if (! empty($link)  &&  ! similarUrls($link, $lastLink)) {
-              if ($county == "Wexford"  &&  Str::contains($link, "secure.actblue"))  break;  // DONE!
+              if (Str::contains($line, "Chip in to elect"))  break;
+              if ($category == "Wexford"  &&  Str::contains($link, "secure.actblue"))  break;  // DONE!
 
               $column = getColumnFor($link);
               if ($column == "web") {
                   $column = ($web1Found ? "web2" : "web1");
                   $web1Found = true;
               }
-              $sql = generateUpdateSql($county, $column, $link);
-              echo "$sql\n";
+//              $sql = generateUpdateSql($category, $column, $link);
+              echo "$category  $column  $link\n";
               $lastLink = $link;
           }
       }
@@ -87,4 +93,14 @@
    function simplifyUrl(string $url): string {
        $url = Str::replaceAll(strtolower($url), "https:", "http:");
        return Str::replaceAll(($url), "www.", "");
+   }
+
+   function getSubstringBeforeMatch(string $line, array $categories): string {
+       foreach ($categories as $category) {
+           if (Str::contains($line, $category)) {
+               $name = Str::substringBefore($line, $category);
+               if (!empty($name)) return $name;
+           }
+       }
+       return "";
    }

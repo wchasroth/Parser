@@ -1,25 +1,26 @@
-
-Error: http:// lenaweedemocraticparty@gmail.com
-
-https://www.bcdemocrats.org   (no website, domain for sale)   berrien
-
-https://www.casscountydems.com    (no content, parked)
-
-https://lapeerdemocrats.com   no cert, nothing there
-   correct value is https://lapeercountydemocrats.com/
-
-montcalm, 1st link is to county itself, 2nd is to party
-
-st clair county has an icon... that is a link back to the county chairs page(?!)
-
 BAD:  http://baycountydems.com
+https://www.bcdemocrats.org   (no website, domain for sale)   berrien
 BAD:  https://www.branchcountydemocrats.com
 BAD:  https://www.branchdems.com
+https://www.casscountydems.com    (no content, parked)
 BAD:  https://cheboygancountydemocraticparty.ruck.us
 BAD:  http://www.gogebicdems.org
 BAD:  https://www.hillsdaledems.com
-BAD:  http://www.hurondems.org
 BAD:  http://www.ioscodemocrats.org
 BAD:  https://www.lapeerdems.com
+https://lapeerdemocrats.com   no cert. Correct value is https://lapeercountydemocrats.com/
+Error: http:// lenaweedemocraticparty@gmail.com
+montcalm, 1st link is to county itself, 2nd is to party
 BAD:  https://www.ogemawdems.com
 BAD:  http://www.sanilacdems.org
+st clair county has an icon... that is a link back to the county chairs page(?!)
+
+====================================================
+
+
+
+
+Facebook:
+   Alpena:       bad??  https://www.facebook.com/Alpena-County-Democratic-Party-2087   appears to be a personal FB page
+   Menominee:    should be https://www.facebook.com/profile.php?id=100064651960900
+   Schoolcraft:  should be https://www.facebook.com/profile.php?id=100064305924940
