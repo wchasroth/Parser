@@ -1,41 +1,50 @@
 <?php
    // Parse county name, website, facebook, and email address from
-   // MDP county party list at https://michigandems.com/county-chairs
-   //
+   // MDP lists (see as a starting point, https://michigandems.com/county-chairs/ )
 
    declare(strict_types=1);
 
    namespace CharlesRothDotNet\Parser;
 
    use CharlesRothDotNet\Alfred\Str;
+   use CharlesRothDotNet\Alfred\Html;
 
    require_once('../vendor/autoload.php');
 
-   $categoryMatches = [" County<", " Club<", " Caucus<",
-       " District 1<", " District 2<", " District 3<",  " District 4<",  " District 5<",  " District 6<", " District 7<",
-       " District 8<", " District 9<", " District 10<", " District 11<", " District 12<", " District 13<"];
-   $excludeMatches = [ "www.w3.org/2000/svg", "michigandems.com", "secure.actblue.com", "secure.ngpvan.com" ];
+   $excludeUrlParts = [ "www.w3.org/2000/svg", "secure.actblue.com", "secure.ngpvan.com" ];
+   $excludeMatches  = ["Chair", "To get involved", "GET LOCAL", "Charles Henry"];
+   $h2Match = '<h2 class="elementor-heading-title elementor-size-default">';
    $category   = "";
    $lastLink = "";
    $web1Found = false;
+   $district = "";
    while ( ($line = fgets(STDIN)) !== false) {
-       // Club<    District N<   Caucus<    County<
-      if (Str::contains($line, '<h2 class="elementor-heading-title elementor-size-default')) {
-         if (Str::hasAnyOf($line, $categoryMatches)) {
-            $line = Str::replaceAll($line, "<BR>", "");
-            $line = Str::replaceAll($line, "<br>", "");
-            $name = getSubstringBeforeMatch($line, $categoryMatches);
-            $name = Str::substringAfterLast($name, ">");
-            $category = trim($name);
-            $category = Str::replaceAll($category, ".", "");
-            $web1Found = false;
+      if (Str::contains($line, $h2Match)  &&  !Str::hasAnyOf($line, $excludeMatches)) {
+
+         $line = Str::replaceAll($line, "<BR>", " ");
+         $line = Str::replaceAll($line, "<br>", " ");
+         $line = Str::replaceAll($line, "  ",   " ");
+         $name = Str::substringAfter ($line, $h2Match);
+         $name = Str::substringBefore($name, "</h2>");
+         $name = Html::removeHtmlTags($name);
+
+         $category = trim($name);
+         $category = Str::replaceAll($category, ".", "");
+         if (Str::contains($name, "District")) {
+             $district = $name . " ";
+             $category = "";
+         }
+         else {
+             $category = $district . $category;
+             $district = "";
+             $web1Found = false;
          }
       }
 
-      if (! empty($category)  &&  ! Str::hasAnyOf($line, $excludeMatches)) {
+      if (! empty($category)  &&  ! Str::hasAnyOf($line, $excludeUrlParts)) {
+          if (Str::contains($line, "Chip in to elect"))  break;
           $link = extractHyperlink($line);
           if (! empty($link)  &&  ! similarUrls($link, $lastLink)) {
-              if (Str::contains($line, "Chip in to elect"))  break;
               if ($category == "Wexford"  &&  Str::contains($link, "secure.actblue"))  break;  // DONE!
 
               $column = getColumnFor($link);
@@ -43,7 +52,7 @@
                   $column = ($web1Found ? "web2" : "web1");
                   $web1Found = true;
               }
-//              $sql = generateUpdateSql($category, $column, $link);
+//            $sql = generateUpdateSql($category, $column, $link);
               echo "$category  $column  $link\n";
               $lastLink = $link;
           }
@@ -75,6 +84,7 @@
       $text = Str::substringBefore($text, '"');
       $text = rtrim($text, "/");
       $text = Str::replaceAll($text, "%20", "");
+      $text = Str::substringBefore($text, "?");
       if (Str::contains($text, "www.w3.org/2000/svg"))   return "";
       if (Str::contains($text, ".pdf"))                  return "";
       if (Str::contains($protocol, "http")  &&  Str::contains($text, "@gmail")) {

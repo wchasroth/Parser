@@ -1,3 +1,0 @@
-#!/bin/bash
-
-php parser.php <../county-parties.html >j
